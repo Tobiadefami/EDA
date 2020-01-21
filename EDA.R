@@ -35,7 +35,7 @@ ggplot(data = smaller, mapping = aes(x = carat)) +
 
 ggplot(data = smaller, mapping = aes(x = carat)) +
   geom_freqpoly(binwidth = 0.01)
-  
+
 # the following histogram shows the lenght(in minutes) of
 #227 erruptions of the Old faithful gyser in yellowsstone
 
@@ -47,9 +47,9 @@ ggplot(data = faithful, mapping = aes(x = eruptions)) +
 
 faithful %>%
   count(eruptions) %>%
-
-view(faithful %>%
-       count(eruptions))
+  
+  view(faithful %>%
+         count(eruptions))
 
 
 # Unusual Variables (Outliers):
@@ -70,9 +70,51 @@ unusual <- diamonds %>%
   arrange(y)
 unusual
 
+# missing values
 
-  
+diamonds2 <- diamonds %>%
+  filter(between(y, 3, 20))
+arrange(diamonds2)
 
-    
+#OR (most preffered)
+
+diamonds2 <- diamonds %>%
+  mutate(y = ifelse(y < 3 | y > 20, NA, y))
+
+ggplot(data = diamonds2, mapping = aes(x = x, y = y)) +
+  geom_point() # note the warning message about the removed missing values
+# to susrpress the warning 
+ggplot(data = diamonds2, mapping = aes(x = x, y = y)) +
+  geom_point(na.rm = TRUE)
+
+# Understanding what makes observations with missing values different from those with recorded values
+
+nycflights13::flights %>%
+  mutate(
+    cancelled = is.na(dep_time),
+    sched_hour = sched_dep_time %/% 100,
+    sched_min = sched_dep_time %% 100,
+    sched_dep_time = sched_hour + sched_min / 60,
+  ) %>%
+  ggplot(mapping = aes(sched_dep_time)) +
+  geom_freqpoly(
+    mapping = aes(color = cancelled), 
+    binwidth = 1/4
+  )
+
+# COVARiATION
+# A categorical and continous variable: exploring the variation between the price of a diamond and its quality
+
+ggplot(data = diamonds, mapping = aes(x = price)) +
+  geom_freqpoly(mapping = aes(color = cut), binwidth = 500)
+
+ggplot(diamonds) +
+  geom_bar(mapping = aes(x = cut))
+
+# To make the comparison easier
+ggplot(data = diamonds, 
+       mapping = aes(x = price, y = ..density..)) +  
+  geom_freqpoly( mapping = aes(color = cut),
+                 binwidth = 500)
 
 
