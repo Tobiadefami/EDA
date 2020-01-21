@@ -70,7 +70,7 @@ unusual <- diamonds %>%
   arrange(y)
 unusual
 
-#Exercise
+
   
 
     
