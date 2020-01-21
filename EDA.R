@@ -113,7 +113,7 @@ ggplot(diamonds) +
 
 # To make the comparison easier
 ggplot(data = diamonds, 
-       mapping = aes(x = price, y = ..density..)) +  
+       mapping = aes(x = price, y = ..density..)) + #Nb: density is the count standardised  
   geom_freqpoly( mapping = aes(color = cut),
                  binwidth = 500)
 
