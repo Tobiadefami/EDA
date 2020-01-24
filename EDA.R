@@ -13,7 +13,8 @@ diamonds %>%
 # continous variables; to examine the distribution of a continous variable, use a histogram
 ggplot(data = diamonds) +
   geom_histogram(mapping = aes(x = carat), binwidth = 0.5)
-# and it can also manually by using dplyr and ggplot
+
+# and it can also manually by using dplyr::count() and ggplot2::cut_width()
 diamonds %>%
   count(cut_width(carat, 0.5))
 
@@ -116,5 +117,29 @@ ggplot(data = diamonds,
        mapping = aes(x = price, y = ..density..)) + #Nb: density is the count standardised  
   geom_freqpoly( mapping = aes(color = cut),
                  binwidth = 500)
+# using a Box plot to display the distribution of a continous variable broken down by a categorical variable
+ggplot(data = diamonds, mapping = aes(x = cut, y = price)) +
+   geom_boxplot()
 
+# reodering categorical variables to make a more informative display
 
+ggplot(data = mpg, mapping = aes(x = class, y = hwy)) +
+  geom_boxplot()
+
+# applying reorder to the code written above:
+ggplot(data = mpg) +
+  geom_boxplot(mapping = aes(
+    x = reorder(class, hwy, FUN = median), 
+    y = hwy
+    )
+  )
+
+# using coord_flip with box_plot will flip it 90 degrees
+
+ggplot(data = mpg) +
+  geom_boxplot(mapping = aes(
+    x = reorder(class, hwy, FUN = median),
+    y = hwy
+  )
+  ) +
+  coord_flip()
